@@ -16,7 +16,7 @@ const Navbar = () => {
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white shadow-md">
-      <div className="container mx-auto px-4 py-8 flex items-center justify-between">
+      <div className="container max-w-7xl mx-auto px-4 py-8 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
           <h1 className="text-xl font-bold text-[#2E3D7D]">Mitra Bangun Desain</h1>

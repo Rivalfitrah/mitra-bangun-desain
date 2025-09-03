@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
@@ -89,9 +90,9 @@ export default function LoginPage() {
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
           Don’t have an account yet?{" "}
-          <a href="/register" className="font-medium text-[#2E3D7D] hover:underline">
+          <Link href="/register" className="font-medium text-[#2E3D7D] hover:underline">
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
