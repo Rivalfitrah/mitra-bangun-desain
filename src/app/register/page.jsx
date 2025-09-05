@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -86,9 +87,9 @@ export default function RegisterPage() {
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="font-medium text-[#2E3D7D] hover:underline">
+          <Link href="/login" className="font-medium text-[#2E3D7D] hover:underline">
             Sign In
-          </a>
+          </Link>
         </p>
       </div>
     </div>

@@ -48,18 +48,19 @@ export default function FaqSection() {
                   />
                 </button>
                 <AnimatePresence initial={false}>
-                    {open === faq.id && (
-                        <motion.div
-                        key={faq.id}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="px-4 pb-3 text-gray-600 text-sm md:text-base overflow-hidden"
-                        >
-                        {faq.answer}
-                        </motion.div>
-                    )}
+                  {open === faq.id && (
+                    <motion.div
+                      key={faq.id}
+                      layout
+                      initial={{ opacity: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, marginTop: 8 }}
+                      exit={{ opacity: 0, marginTop: 0 }}
+                      transition={{ duration: 0.35, ease: "easeInOut" }}
+                      className="px-4 pb-3 text-gray-600 text-sm md:text-base"
+                    >
+                      {faq.answer}
+                    </motion.div>
+                  )}
                 </AnimatePresence>
               </div>
             ))}
