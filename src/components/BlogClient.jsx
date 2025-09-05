@@ -6,7 +6,7 @@ export default function BlogsClient({ posts }) {
   return (
     <section className="bg-white py-16 px-6 md:px-30">
       <h2 className="text-center text-3xl font-bold">
-        <span className="text-orange-500">Read Our</span>{" "}
+        <span className="text-red-500">Read Our</span>{" "}
         <span className="text-blue-900">Latest News</span>
       </h2>
 
@@ -22,7 +22,7 @@ export default function BlogsClient({ posts }) {
                     className="rounded-xl mb-4 h-48 w-full object-cover"
                   />
                 )}
-                <p className="text-orange-500 font-medium">{post.category}</p>
+                <p className="text-red-500 font-medium">{post.category}</p>
                 <h3 className="font-bold text-lg text-blue-900">
                   {post.title}
                 </h3>

@@ -8,12 +8,12 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const router = useRouter(); // ✅ tambahkan ini
+  const router = useRouter(); 
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // logic lain kalau perlu
-    router.push("/register/profil"); // ✅ ini sekarang jalan
+    router.push("/register/profil"); 
   };
 
   return (
