@@ -3,15 +3,42 @@
 import Link from "next/link";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
+import { login } from "@/lib/api";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({ email, password });
-  };
+  const router = useRouter(); // ✅ tambahkan ini
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await login(email, password);
+
+    if (response.user.status === "pending") {
+      router.push("/tunggu");
+    } else if (response.user.status === "active") {
+      router.push("/dashboard");
+    }
+
+    Swal.fire({
+      icon: "success",
+      title: "Login Berhasil",
+      text: "Selamat datang kembali!",
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Login Gagal",
+      text: error.response?.data?.error || "Terjadi kesalahan",
+    });
+    console.error("Error during login:", error);
+  }
+};
+
 
   return (
     <div

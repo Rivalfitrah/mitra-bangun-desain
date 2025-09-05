@@ -14,8 +14,12 @@ model User {
   password String
   status String @default("pending")
   metode String @default("manual")
+  role String @default("user")
   createdAt DateTime @default(now())
 }
+
+
+
 
 
 
