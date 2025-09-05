@@ -71,7 +71,7 @@ export default function OurTeam() {
   return (
     <section className="bg-white py-16 px-6 md:px-30">
       <h2 className="text-center text-3xl md:text-4xl font-bold mb-10 text-[#2d3a74]">
-        Meet <span className="text-orange-500">Our Team</span>
+        Meet <span className="text-red-500">Our Team</span>
       </h2>
 
       {useSlider ? (

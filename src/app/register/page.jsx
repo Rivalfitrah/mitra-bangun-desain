@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  const router = useRouter(); // ✅ tambahkan ini
+  const router = useRouter(); 
 
 const handleSubmit = async (e) => {
   e.preventDefault(); // supaya form tidak reload halaman
