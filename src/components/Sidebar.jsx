@@ -11,12 +11,29 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { userLogin } from "@/lib/api";
+
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname(); 
+  const pathname = usePathname();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Fetch user data from API or context
+    const fetchUser = async () => {
+      try {
+        const userData = await userLogin();
+        setUser(userData);
+        console.log("Fetched user data:", userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <>
@@ -175,17 +192,19 @@ export default function Sidebar() {
             <span>Pengaturan</span>
           </Link>
 
-          <Link
-            href="/dashboard/user"
-            className={`flex items-center gap-3 p-2 rounded-md
+        {user?.profil?.role === "admin" && (
+
+            <Link href="/dashboard/user"
+              className={`flex items-center gap-3 p-2 rounded-md
               ${pathname === "/dashboard/user"
                 ? "bg-white text-[#243B83]"
                 : "hover:bg-blue-800"
               }`}
-          >
-            <Settings size={20} />
-            <span>Users</span>
-          </Link>
+            >
+              <Settings size={20} />
+              <span>Users</span>
+            </Link>
+        )}
         </nav>
       </div>
 

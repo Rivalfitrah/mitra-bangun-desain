@@ -80,3 +80,12 @@ export async function logoutUser() {
   }
 }
 
+export async function userPending() {
+  try {
+    const response = await api.get("/admin/users");
+    return response.data;
+  } catch (error) {
+    console.error("gagal mengambil user pending:", error);
+    throw error;
+  }
+}

@@ -1,14 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
-import { Bell, LogOut, User } from "lucide-react";
-import Link from "next/link"
-import { useRouter } from "next/navigation";
 import HeaderDashboard from "@/components/HeaderDashboard";
+import { userLogin } from "@/lib/api"; // pastikan pathnya benar
 
 export default function Page() {
-  const router = useRouter();
   const [recent] = useState([
     { id: "RM-001", date: "Apr 06, 2025", status: "Approved" },
     { id: "RM-002", date: "Apr 06, 2025", status: "Approved" },
@@ -16,6 +13,22 @@ export default function Page() {
     { id: "RM-004", date: "Apr 06, 2025", status: "Pending" },
     { id: "RM-005", date: "Apr 06, 2025", status: "Approved" },
   ]);
+
+    const [user, setUser] = useState(null)
+  
+    useEffect(() => {
+      // Fetch user data from API or context
+      const fetchUser = async () => {
+        try {
+          const userData = await userLogin();
+          setUser(userData);
+          console.log("Fetched user data:", userData);
+        } catch (error) {
+          console.error("Failed to fetch user:", error);
+        }
+      };
+      fetchUser();
+    }, []);
 
   return (
     <div className="flex bg-white">
@@ -37,7 +50,7 @@ export default function Page() {
             <div className="flex flex-col justify-between px-10 py-10">
               <div>
                 <h2 className="text-lg">Welcome back,</h2>
-                <h1 className="text-2xl font-bold">Admin</h1>
+                <h1 className="text-2xl font-bold">{user?.name || "loading..."}</h1>
               </div>
               <p className="text-sm opacity-90 mt-4">Do you ready for today?</p>
             </div>
