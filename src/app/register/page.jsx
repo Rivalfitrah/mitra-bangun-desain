@@ -12,21 +12,25 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
 
-  const router = useRouter(); 
+  const router = useRouter();
 
 const handleSubmit = async (e) => {
-  e.preventDefault(); // supaya form tidak reload halaman
+  e.preventDefault();
 
   try {
-    const response = await register(name, email, password);
+    const data = await register(name, email, password); // ✅ simpan hasil register
+
+    // ✅ simpan userId dari backend ke localStorage
+    localStorage.setItem("userId", data.user.id);
 
     Swal.fire({
       icon: "success",
       title: "Registrasi Berhasil",
-      text: "Silakan login dengan akun Anda.",
+      text: "Silakan lengkapi detail profil Anda.",
+    }).then(() => {
+      router.push("/register/profil");
     });
 
-    router.push("/login");
   } catch (error) {
     Swal.fire({
       icon: "error",
@@ -36,6 +40,7 @@ const handleSubmit = async (e) => {
     console.error("Error during registration:", error);
   }
 };
+
 
 
   return (

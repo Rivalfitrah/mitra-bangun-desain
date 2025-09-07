@@ -14,8 +14,18 @@ model User {
   password String
   status String @default("pending")
   metode String @default("manual")
-  role String @default("user")
   createdAt DateTime @default(now())
+  profil Profil?
+}
+
+model Profil {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  alamat    String
+  phone     String
+  role      String
+  imageUrl  String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 

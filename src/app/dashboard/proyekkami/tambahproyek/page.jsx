@@ -4,6 +4,7 @@ import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import { Bell, LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import HeaderDashboard from "@/components/HeaderDashboard";
 
 
 export default function Invoice() {
@@ -21,20 +22,9 @@ export default function Invoice() {
       <div className="flex-1 bg-white px-6 min-h-screen ml-0 md:ml-64">
         {/* HEADER */}
         <div className="min-h-screen bg-white p-4 md:p-6">
-          <header className="flex justify-end items-center gap-4 mb-6">
-            <button className="p-2 rounded-full bg-[#243B83] hover:bg-blue-700">
-              <Bell size={22} />
-            </button>
-            <button className="p-2 rounded-full bg-[#243B83] hover:bg-blue-700">
-              <LogOut size={22} />
-            </button>
-            <div onClick={() => router.push("/dashboard/profil")} className="flex items-center gap-2 cursor-pointer">
-              <div className="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
-                <img src="/assets/dashboard/default-profile.png" alt="Profile" className="w-full h-full object-cover rounded-full"/>
-              </div>
-              <span className="hidden md:inline text-[#243B83] font-medium">Admin</span>
-            </div>
-          </header>
+
+          <HeaderDashboard />
+
 
         <h1 className="text-2xl font-bold text-[#243B83] mb-6">Proyek Kami</h1>
 

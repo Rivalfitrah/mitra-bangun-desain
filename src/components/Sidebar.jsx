@@ -178,7 +178,7 @@ export default function Sidebar() {
           <Link
             href="/dashboard/user"
             className={`flex items-center gap-3 p-2 rounded-md
-              ${pathname === "/dashboard/pengaturan"
+              ${pathname === "/dashboard/user"
                 ? "bg-white text-[#243B83]"
                 : "hover:bg-blue-800"
               }`}
