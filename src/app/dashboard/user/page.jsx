@@ -4,10 +4,15 @@ import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 import HeaderDashboard from "@/components/HeaderDashboard";
 import { userPending } from "@/lib/api"; // pastikan pathnya benar
+import { MdDelete } from "react-icons/md";
+import { FaUserCheck } from "react-icons/fa";
+import { approveUser, rejectUser } from "@/lib/api"; // pastikan pathnya benar
+import Swal from "sweetalert2";
 
 export default function ProyekKami() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -24,6 +29,44 @@ export default function ProyekKami() {
 
     fetchUsers();
   }, []);
+
+  const handleApprove = async (userId) => {
+    try {
+      await approveUser(userId);
+      Swal.fire({
+        title: 'User telah di-approve',
+        icon: 'success',
+      });
+      // Logika untuk meng-approve user
+      console.log("Approve user with ID:", userId);
+    } catch (error) {
+      Swal.fire({
+        title: 'Gagal meng-approve user',
+        text: 'Terjadi kesalahan. Silakan coba lagi.',
+        icon: 'error',
+      });
+      console.error("Failed to approve user:", error);
+    }
+  };
+
+  const handleReject = async (userId) => {
+    try {
+      await rejectUser(userId);
+      Swal.fire({
+        title: 'User telah di-reject',
+        icon: 'success',
+      });
+      // Logika untuk menolak user
+      console.log("Reject user with ID:", userId);
+    } catch (error) {
+      Swal.fire({
+        title: 'Gagal menolak user',
+        text: 'Terjadi kesalahan. Silakan coba lagi.',
+        icon: 'error',
+      });
+      console.error("Failed to reject user:", error);
+    }
+  };
 
   return (
     <div className="md:flex bg-white">
@@ -80,9 +123,15 @@ export default function ProyekKami() {
                       <td className="px-6 py-4">{user.profil?.role || "-"}</td>
                       <td className="px-6 py-4">{user.status}</td>
                       <td className="px-6 py-4">
-                        <button className="text-blue-500 hover:underline">
-                          Confirm
-                        </button>
+                        <div className="flex">
+                          <button onClick={() => handleReject(user.id)} className="text-red-500 hover:underline">
+                            <MdDelete size={20} />
+                          </button>
+
+                          <button onClick={() => handleApprove(user.id)} className="text-green-500 hover:underline ml-4">
+                            <FaUserCheck size={20} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))

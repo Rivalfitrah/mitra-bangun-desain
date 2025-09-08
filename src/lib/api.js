@@ -89,3 +89,23 @@ export async function userPending() {
     throw error;
   }
 }
+
+export async function approveUser(userId) {
+  try {
+    const response = await api.post(`/admin/users/${userId}/approved`);
+    return response.data;
+  } catch (error) {
+    console.error("gagal approve user:", error);
+    throw error;
+  }
+}
+
+export async function rejectUser(userId) {
+  try {
+    const response = await api.post(`/admin/users/${userId}/rejected`);
+    return response.data;
+  } catch (error) {
+    console.error("gagal reject user:", error);
+    throw error;
+  }
+}
