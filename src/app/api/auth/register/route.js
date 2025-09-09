@@ -7,12 +7,12 @@ const prisma = new PrismaClient();
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, email, password } = body;
+    const { email, password, confirmPassword } = body;
 
     // Validasi input
-    if (!name || !email || !password) {
+    if (!email || !password || !confirmPassword) {
       return NextResponse.json(
-        { message: "Name, email, dan password wajib diisi" },
+        { message: "Email, password, dan konfirmasi password wajib diisi" },
         { status: 400 }
       );
     }
@@ -35,9 +35,9 @@ export async function POST(req) {
     // Buat user baru
     const newUser = await prisma.user.create({
       data: {
-        name,
         email,
         password: hashedPassword,
+        confirmPassword: hashedPassword,
         // status & metode otomatis default dari schema
       },
     });

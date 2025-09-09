@@ -9,9 +9,9 @@ datasource db {
 
 model User {
   id    Int    @id @default(autoincrement())
-  name  String
   email String @unique
   password String
+  confirmPassword String
   status String @default("pending")
   metode String @default("manual")
   createdAt DateTime @default(now())
@@ -21,12 +21,14 @@ model User {
 model Profil {
   id        Int      @id @default(autoincrement())
   userId    Int      @unique
+  nama      String
   alamat    String
   phone     String
   role      String
   imageUrl  String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 
 
 

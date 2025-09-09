@@ -23,13 +23,23 @@ const handleSubmit = async (e) => {
     // simpan userId di localStorage biar bisa dipakai di dashboard
     localStorage.setItem("userId", response.user.id);
 
+    // cek status user
+    if (response.user.status === "pending") {
+      Swal.fire({
+        icon: "info",
+        title: "Menunggu Konfirmasi Admin",
+        text: "Akun Anda masih dalam proses verifikasi. Silakan tunggu admin menyetujui.",
+      });
+      return; 
+    }
+
     if (response.user.profil) {
       Swal.fire({
         icon: "success",
         title: "Login Berhasil",
         text: "Selamat datang kembali!",
         timer: 1500,
-        showConfirmButton: false, // ✅ biar .then() pasti jalan
+        showConfirmButton: false, 
       }).then(() => {
         router.push("/dashboard");
       });
@@ -51,13 +61,9 @@ const handleSubmit = async (e) => {
       title: "Login Gagal",
       text: errorMessage,
     });
-    if (errorMessage.includes("disetujui")) {
-      router.push("/waiting");
-    }
     console.error("Error during login:", error);
   }
 };
-
 
   return (
     <div
@@ -106,7 +112,7 @@ const handleSubmit = async (e) => {
             <input
               type="password"
               id="password"
-              placeholder="********"
+              placeholder="Masukan password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="mt-1 w-full rounded-lg border text-black border-gray-300 px-4 py-2 text-sm focus:border-[#2E3D7D] focus:outline-none focus:ring-2 focus:ring-[#2E3D7D] placeholder:text-gray-400"
@@ -134,11 +140,6 @@ const handleSubmit = async (e) => {
           <span className="mx-2 text-sm text-gray-400">Or</span>
           <span className="h-px w-full bg-gray-200"></span>
         </div>
-
-        {/* Google Sign-In */}
-        <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 active:scale-95">
-          <FcGoogle size={20} /> Sign in with Google
-        </button>
 
         {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">

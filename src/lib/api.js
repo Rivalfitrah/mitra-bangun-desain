@@ -8,12 +8,12 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export async function register(name, email, password) {
+export async function register( email, password, confirmPassword ) {
   try {
     const response = await api.post("/auth/register", {
-      name,
       email,
       password,
+      confirmPassword,
     });
     return response.data;
   } catch (error) {
@@ -35,10 +35,11 @@ export async function login(email, password) {
   }
 }
 
-export async function detailProfil({ userId, phone, alamat, role, image }) {
+export async function detailProfil({ userId, nama, phone, alamat, role, image }) {
   try {
     const formData = new FormData();
     formData.append("userId", userId);
+    formData.append("nama", nama);
     formData.append("phone", phone);
     formData.append("alamat", alamat);
     formData.append("role", role);

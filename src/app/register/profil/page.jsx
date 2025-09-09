@@ -12,6 +12,7 @@ export default function Profil() {
   const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
+    nama: "",
     phone: "",
     alamat: "",
     role: "",
@@ -48,6 +49,7 @@ const handleSubmit = async (e) => {
 
     const res = await detailProfil({
       userId,
+      nama: formData.nama,
       phone: formData.phone,
       alamat: formData.alamat,
       role: formData.role,
@@ -125,6 +127,24 @@ const handleSubmit = async (e) => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label htmlFor="nama" className="block text-sm font-semibold text-gray-700 mb-2">
+              Nama Lengkap
+            </label>
+            <input
+              type="text"
+              name="nama"
+              placeholder="Masukkan nama lengkap"
+              value={formData.nama}
+              onChange={handleChange}
+              className="w-full rounded-xl border-2 text-black px-4 py-3.5 text-sm
+                                     transition-all duration-300 focus:outline-none
+                                     focus:ring-4 focus:ring-[#2E3D7D]/10 placeholder:text-gray-400
+                                     hover:border-gray-300 bg-gray-50/50 focus:bg-white
+                                     border-gray-200 focus:border-[#2E3D7D]"
+              required
+            />
+          </div>
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Nomor Telepon

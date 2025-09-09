@@ -10,7 +10,7 @@ import Swal from "sweetalert2";
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const router = useRouter();
 
@@ -18,7 +18,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const data = await register(name, email, password); // ✅ simpan hasil register
+    const data = await register(email, password, confirmPassword); // ✅ simpan hasil register
 
     // ✅ simpan userId dari backend ke localStorage
     localStorage.setItem("userId", data.user.id);
@@ -60,21 +60,6 @@ const handleSubmit = async (e) => {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-600">
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              placeholder="John Doe"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="mt-1 w-full rounded-lg border text-black border-gray-300 px-4 py-2 text-sm focus:border-[#2E3D7D] focus:outline-none focus:ring-2 focus:ring-[#2E3D7D] placeholder:text-gray-400"
-              required
-            />
-          </div>
-
-          <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-600">
               Email
             </label>
@@ -99,6 +84,21 @@ const handleSubmit = async (e) => {
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 w-full rounded-lg border text-black border-gray-300 px-4 py-2 text-sm focus:border-[#2E3D7D] focus:outline-none focus:ring-2 focus:ring-[#2E3D7D] placeholder:text-gray-400"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="********"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="mt-1 w-full rounded-lg border text-black border-gray-300 px-4 py-2 text-sm focus:border-[#2E3D7D] focus:outline-none focus:ring-2 focus:ring-[#2E3D7D] placeholder:text-gray-400"
               required
             />

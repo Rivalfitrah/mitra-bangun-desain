@@ -22,6 +22,7 @@ export async function POST(req) {
     const formData = await req.formData();
 
     const userId = formData.get("userId");
+    const nama = formData.get("nama");
     const alamat = formData.get("alamat");
     const phone = formData.get("phone");
     const role = formData.get("role");
@@ -47,6 +48,7 @@ export async function POST(req) {
     const profil = await prisma.profil.upsert({
       where: { userId: Number(userId) },
       update: {
+        nama,
         alamat,
         phone,
         role,
@@ -54,6 +56,7 @@ export async function POST(req) {
       },
       create: {
         userId: Number(userId),
+        nama,
         alamat,
         phone,
         role,
