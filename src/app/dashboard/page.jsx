@@ -1,3 +1,4 @@
+
 import Sidebar from "@/components/Sidebar";
 import HeaderDashboard from "@/components/HeaderDashboard";
 import RecentRequest from "@/components/RecentRequest";
@@ -14,6 +15,9 @@ export default function Page() {
       {/* Konten utama */}
       <div className="flex-1 bg-white px-6 min-h-screen ml-0 md:ml-64">
         <div className="min-h-screen bg-white p-4 md:p-6">
+          {/* HEADER */}
+          <HeaderDashboard />
+
 
           {/* WELCOME CARD */}
           <div className="bg-[#243B83] text-white rounded-xl flex flex-col md:flex-row justify-between">

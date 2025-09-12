@@ -18,7 +18,7 @@ export default async function ProfileInfo() {
     <div className="flex items-center gap-2">
       <div className="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
         <img
-          src={user?.profil?.imageUrl || "/assets/dashboard/default-profile.png"}
+          src={user?.image || "/assets/dashboard/default-profile.png"}
           alt="Profile"
           className="w-full h-full object-cover rounded-full"
         />

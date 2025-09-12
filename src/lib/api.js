@@ -132,3 +132,50 @@ export async function removeBackground(file) {
   }
 }
 
+// Upload tanda tangan ke Cloudinary
+export async function uploadSignature({ file, userId, type = 'manual' }) {
+  try {
+    const formData = new FormData();
+    
+    if (typeof file === 'string' && file.startsWith('data:image/')) {
+      // Untuk canvas signature (data URL)
+      formData.append('signature', file);
+      formData.append('type', 'manual');
+    } else if (file instanceof File) {
+      // Untuk file upload
+      formData.append('signature', file);
+      formData.append('type', 'upload');
+    } else {
+      throw new Error('Format file tidak valid');
+    }
+    
+    if (userId) {
+      formData.append('userId', userId);
+    }
+    
+    formData.append('type', type);
+
+    const response = await api.post("/signature/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    
+    return response.data;
+  } catch (error) {
+    console.error("gagal upload tanda tangan:", error);
+    throw error;
+  }
+}
+
+// Hapus tanda tangan dari Cloudinary
+export async function deleteSignature(publicId) {
+  try {
+    const response = await api.delete(`/signature/upload?publicId=${publicId}`);
+    return response.data;
+  } catch (error) {
+    console.error("gagal hapus tanda tangan:", error);
+    throw error;
+  }
+}
+
