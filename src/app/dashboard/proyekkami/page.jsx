@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
-import { Bell, LogOut, User } from "lucide-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import HeaderDashboard from "@/components/HeaderDashboard";
@@ -14,7 +13,7 @@ export default function ProyekKami() {
 
   const handleClick = () => {
     router.push("/dashboard/proyekkami/tambahproyek");
- };
+  };
 
   const data = Array.from({ length: 25 }, (_, i) => ({
     no: i + 1,
@@ -51,9 +50,7 @@ export default function ProyekKami() {
       <div className="flex-1 bg-white px-6 min-h-screen ml-0 md:ml-64">
         {/* HEADER */}
         <div className="min-h-screen bg-white p-4 md:p-6">
-
           <HeaderDashboard />
-
 
           <h1 className="text-2xl font-bold text-[#243B83] mb-6">
             Proyek kami
@@ -63,8 +60,8 @@ export default function ProyekKami() {
           <div className="bg-white border-l-4 border-[#243B83] p-4 rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.1)] mb-6">
             <h2 className="font-semibold text-[#243B83]">Informasi</h2>
             <p className="text-md text-gray-600 mt-1">
-              Berikut ini daftar proyek yang sudah ditangani oleh mitra bangun desain. 
-              anda bisa mengatur ini untuk ditampilkan di company profil
+              Berikut ini daftar proyek yang sudah ditangani oleh mitra bangun
+              desain. anda bisa mengatur ini untuk ditampilkan di company profil
             </p>
           </div>
 
@@ -78,10 +75,11 @@ export default function ProyekKami() {
             <button className="px-6 py-3 border-[#243B83] border rounded-lg shadow-sm hover:bg-[#243B83] hover:text-white text-[#243B83]">
               Sortir
             </button>
-            <button 
-                onClick={handleClick}
-                className="px-6 py-3 bg-[#243B83] border rounded-lg shadow-sm hover:bg-blue-700 text-white">
-                Tambah
+            <button
+              onClick={handleClick}
+              className="px-6 py-3 bg-[#243B83] border rounded-lg shadow-sm hover:bg-blue-700 text-white"
+            >
+              Tambah
             </button>
           </div>
 
@@ -123,15 +121,16 @@ export default function ProyekKami() {
           {/* Pagination */}
           <div className="flex justify-between items-center mt-4 text-sm">
             <button
-                onClick={handlePrev}
-                disabled={currentPage === 1}
-                className={`flex items-center gap-1 px-3 py-1 rounded 
-                    ${currentPage === 1 
-                    ? "text-gray-400 cursor-not-allowed" 
-                    : "text-[#243B83] font-medium"
+              onClick={handlePrev}
+              disabled={currentPage === 1}
+              className={`flex items-center gap-1 px-3 py-1 rounded 
+                    ${
+                      currentPage === 1
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-[#243B83] font-medium"
                     }`}
-                >
-                <ChevronLeft size={18} /> Prev
+            >
+              <ChevronLeft size={18} /> Prev
             </button>
 
             <div className="flex gap-2">
@@ -151,15 +150,16 @@ export default function ProyekKami() {
             </div>
 
             <button
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
-                className={`flex items-center gap-1 px-3 py-1 rounded 
-                    ${currentPage === totalPages 
-                    ? "text-gray-400 cursor-not-allowed" 
-                    : "text-[#243B83] font-medium"
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`flex items-center gap-1 px-3 py-1 rounded 
+                    ${
+                      currentPage === totalPages
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-[#243B83] font-medium"
                     }`}
-                >
-                Next <ChevronRight size={18} />
+            >
+              Next <ChevronRight size={18} />
             </button>
           </div>
         </div>

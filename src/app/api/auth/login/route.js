@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { image } from "framer-motion/client";
 
 const prisma = new PrismaClient();
 
@@ -38,6 +39,9 @@ export async function POST(req) {
       sub: user.id,
       role: user.profil?.role || "user",
       status: user.status,
+      nama: user.profil?.nama || null,
+      email: user.email,
+      image: user.profil?.imageUrl || null,
       hasProfile: !!user.profil, // true kalau profil sudah ada
     };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2h' });
@@ -46,7 +50,7 @@ export async function POST(req) {
       message: "Login berhasil",
       user: {
         id: user.id,
-        name: user.name,
+        name: user.profil?.nama,
         email: user.email,
         role: user.profil?.role || "user",
         status: user.status,

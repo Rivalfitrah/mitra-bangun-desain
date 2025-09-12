@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+'use client';
+import React, { Children, useEffect, useState } from 'react'
 import { Bell, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { userLogin, logoutUser } from '@/lib/api';
 import Swal from 'sweetalert2';
 
 
-function HeaderDashboard() {
+function HeaderDashboard({children}) {
   const router = useRouter();
   const [user, setUser] = useState(null)
 
@@ -61,12 +62,7 @@ function HeaderDashboard() {
               <LogOut size={22} />
             </button>
             <div onClick={() => router.push("/dashboard/profil")} className="flex items-center gap-2 cursor-pointer">
-              <div className="w-10 h-10 bg-gray-500 rounded-full flex items-center justify-center">
-                <img src={user?.profil.imageUrl || "/assets/dashboard/default-profile.png"} alt="Profile" className="w-full h-full object-cover rounded-full"/>
-              </div>
-              <span className="hidden md:inline text-[#243B83] font-medium">
-                {user?.name || "loading"}
-              </span>
+              {children}
             </div>
           </header>
   )

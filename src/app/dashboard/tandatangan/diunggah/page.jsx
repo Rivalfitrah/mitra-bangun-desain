@@ -7,7 +7,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import HeaderDashboard from "@/components/HeaderDashboard";
 
-
 export default function DiunggahPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -54,7 +53,6 @@ export default function DiunggahPage() {
         {/* HEADER */}
         <div className="min-h-screen bg-white p-4 md:p-6">
           <HeaderDashboard />
- 
 
           <h1 className="text-2xl font-bold text-[#243B83] mb-6">
             Dokumen Diunggah
@@ -114,7 +112,10 @@ export default function DiunggahPage() {
                       </span>
                     </td>
                     <td className="px-4 py-2 flex gap-2">
-                      <button onClick={handleClick} className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white">
+                      <button
+                        onClick={handleClick}
+                        className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white"
+                      >
                         Detail
                       </button>
                       <button className="px-3 py-1 bg-[#243B83] text-white rounded hover:bg-blue-500">
@@ -133,15 +134,16 @@ export default function DiunggahPage() {
           {/* Pagination */}
           <div className="flex justify-between items-center mt-4 text-sm">
             <button
-                onClick={handlePrev}
-                disabled={currentPage === 1}
-                className={`flex items-center gap-1 px-3 py-1 rounded 
-                    ${currentPage === 1 
-                    ? "text-gray-400 cursor-not-allowed" 
-                    : "text-[#243B83] font-medium"
+              onClick={handlePrev}
+              disabled={currentPage === 1}
+              className={`flex items-center gap-1 px-3 py-1 rounded 
+                    ${
+                      currentPage === 1
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-[#243B83] font-medium"
                     }`}
-                >
-                <ChevronLeft size={18} /> Prev
+            >
+              <ChevronLeft size={18} /> Prev
             </button>
 
             <div className="flex gap-2">
@@ -161,15 +163,16 @@ export default function DiunggahPage() {
             </div>
 
             <button
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
-                className={`flex items-center gap-1 px-3 py-1 rounded 
-                    ${currentPage === totalPages 
-                    ? "text-gray-400 cursor-not-allowed" 
-                    : "text-[#243B83] font-medium"
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`flex items-center gap-1 px-3 py-1 rounded 
+                    ${
+                      currentPage === totalPages
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-[#243B83] font-medium"
                     }`}
-                >
-                Next <ChevronRight size={18} />
+            >
+              Next <ChevronRight size={18} />
             </button>
           </div>
         </div>

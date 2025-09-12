@@ -25,12 +25,12 @@ export async function GET() {
       where: { status: "pending" },
       select: {
         id: true,
-        name: true,
         email: true,
         status: true,
         createdAt: true,
         profil: {
           select: {
+            nama: true,
             role: true,
             alamat: true,
             phone: true,

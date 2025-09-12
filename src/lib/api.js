@@ -110,3 +110,25 @@ export async function rejectUser(userId) {
     throw error;
   }
 }
+
+export async function removeBackground(file) {
+  try {
+    console.log("Sending file to remove background API:", file.name, file.type, file.size);
+    
+    const formData = new FormData();
+    formData.append("image_file", file); // Fixed: use "image_file" to match backend
+
+    const response = await api.post("/removebg", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    
+    console.log("Remove background response:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("gagal menghapus background:", error.response?.data || error);
+    throw error;
+  }
+}
+

@@ -53,7 +53,6 @@ export default function Ditandatangani() {
         <div className="min-h-screen bg-white p-4 md:p-6">
           <HeaderDashboard />
 
-
           <h1 className="text-2xl font-bold text-[#243B83] mb-6">
             Permintaan Tanda tangan
           </h1>
@@ -62,7 +61,8 @@ export default function Ditandatangani() {
           <div className="bg-white border-l-4 border-[#243B83] p-4 rounded-lg shadow-[0_0_20px_rgba(0,0,0,0.1)] mb-6">
             <h2 className="font-semibold text-[#243B83]">Informasi</h2>
             <p className="text-md text-gray-600 mt-1">
-              Berikut ini daftar dokumen yang perlu anda tanda tangani. anda harus melakukan persetujuan terlebih dahulu
+              Berikut ini daftar dokumen yang perlu anda tanda tangani. anda
+              harus melakukan persetujuan terlebih dahulu
             </p>
           </div>
 
@@ -100,7 +100,10 @@ export default function Ditandatangani() {
                     <td className="px-4 py-2">{item.upload}</td>
                     <td className="px-4 py-2">{item.persetujuan}</td>
                     <td className="px-4 py-2 flex gap-2">
-                      <button onClick={handleClick} className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white">
+                      <button
+                        onClick={handleClick}
+                        className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white"
+                      >
                         Detail
                       </button>
                       <button className="px-3 py-1 bg-[#243B83] text-white rounded hover:bg-blue-500">
@@ -119,15 +122,16 @@ export default function Ditandatangani() {
           {/* Pagination */}
           <div className="flex justify-between items-center mt-4 text-sm">
             <button
-                onClick={handlePrev}
-                disabled={currentPage === 1}
-                className={`flex items-center gap-1 px-3 py-1 rounded 
-                    ${currentPage === 1 
-                    ? "text-gray-400 cursor-not-allowed" 
-                    : "text-[#243B83] font-medium"
+              onClick={handlePrev}
+              disabled={currentPage === 1}
+              className={`flex items-center gap-1 px-3 py-1 rounded 
+                    ${
+                      currentPage === 1
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-[#243B83] font-medium"
                     }`}
-                >
-                <ChevronLeft size={18} /> Prev
+            >
+              <ChevronLeft size={18} /> Prev
             </button>
 
             <div className="flex gap-2">
@@ -147,15 +151,16 @@ export default function Ditandatangani() {
             </div>
 
             <button
-                onClick={handleNext}
-                disabled={currentPage === totalPages}
-                className={`flex items-center gap-1 px-3 py-1 rounded 
-                    ${currentPage === totalPages 
-                    ? "text-gray-400 cursor-not-allowed" 
-                    : "text-[#243B83] font-medium"
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`flex items-center gap-1 px-3 py-1 rounded 
+                    ${
+                      currentPage === totalPages
+                        ? "text-gray-400 cursor-not-allowed"
+                        : "text-[#243B83] font-medium"
                     }`}
-                >
-                Next <ChevronRight size={18} />
+            >
+              Next <ChevronRight size={18} />
             </button>
           </div>
         </div>

@@ -13,7 +13,6 @@ export default function ProyekKami() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -34,16 +33,16 @@ export default function ProyekKami() {
     try {
       await approveUser(userId);
       Swal.fire({
-        title: 'User telah di-approve',
-        icon: 'success',
+        title: "User telah di-approve",
+        icon: "success",
       });
       // Logika untuk meng-approve user
       console.log("Approve user with ID:", userId);
     } catch (error) {
       Swal.fire({
-        title: 'Gagal meng-approve user',
-        text: 'Terjadi kesalahan. Silakan coba lagi.',
-        icon: 'error',
+        title: "Gagal meng-approve user",
+        text: "Terjadi kesalahan. Silakan coba lagi.",
+        icon: "error",
       });
       console.error("Failed to approve user:", error);
     }
@@ -53,16 +52,16 @@ export default function ProyekKami() {
     try {
       await rejectUser(userId);
       Swal.fire({
-        title: 'User telah di-reject',
-        icon: 'success',
+        title: "User telah di-reject",
+        icon: "success",
       });
       // Logika untuk menolak user
       console.log("Reject user with ID:", userId);
     } catch (error) {
       Swal.fire({
-        title: 'Gagal menolak user',
-        text: 'Terjadi kesalahan. Silakan coba lagi.',
-        icon: 'error',
+        title: "Gagal menolak user",
+        text: "Terjadi kesalahan. Silakan coba lagi.",
+        icon: "error",
       });
       console.error("Failed to reject user:", error);
     }
@@ -124,11 +123,17 @@ export default function ProyekKami() {
                       <td className="px-6 py-4">{user.status}</td>
                       <td className="px-6 py-4">
                         <div className="flex">
-                          <button onClick={() => handleReject(user.id)} className="text-red-500 hover:underline">
+                          <button
+                            onClick={() => handleReject(user.id)}
+                            className="text-red-500 hover:underline"
+                          >
                             <MdDelete size={20} />
                           </button>
 
-                          <button onClick={() => handleApprove(user.id)} className="text-green-500 hover:underline ml-4">
+                          <button
+                            onClick={() => handleApprove(user.id)}
+                            className="text-green-500 hover:underline ml-4"
+                          >
                             <FaUserCheck size={20} />
                           </button>
                         </div>
