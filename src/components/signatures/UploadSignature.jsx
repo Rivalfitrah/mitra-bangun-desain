@@ -1,6 +1,9 @@
+'use client';
 import React from 'react'
-import { useState } from 'react'
-import { removeBackground, uploadSignature } from '@/lib/api'; // fungsi untuk remove.bg dan upload ke Cloudinary
+import { useState, useEffect } from 'react'
+import { removeBackground, uploadSignature, deleteSignature } from '@/lib/api'; // fungsi untuk remove.bg dan upload ke Cloudinary
+import { getSignature } from '@/lib/api'
+import Swal from 'sweetalert2';
 
 
 function UploadSignature({ userId = 'anonymous' }) {
@@ -8,6 +11,55 @@ function UploadSignature({ userId = 'anonymous' }) {
   const [preview, setPreview] = useState(null); // hasil remove.bg (data URL)
   const [loading, setLoading] = useState(false);
   const [savedSignature, setSavedSignature] = useState(null); // hasil upload (url, public_id, ...)
+
+  // Load saved signature on mount
+  useEffect(() => {
+    let mounted = true;
+    async function load() {
+      try {
+        const res = await getSignature();
+        if (!mounted) return;
+        if (res && res.success && res.data) {
+          setSavedSignature(res.data);
+          if (res.data.uploadUrl) {
+            setPreview(res.data.uploadUrl);
+          }
+        }
+      } catch (err) {
+        console.error('Gagal load signature:', err);
+      }
+    }
+    load();
+    return () => { mounted = false };
+  }, []);
+
+  const handleDeleteFromCloud = async () => {
+    if (!savedSignature) return;
+    if (!confirm('Yakin ingin menghapus tanda tangan ini dari Cloud?')) return;
+    try {
+      const res = await deleteSignature('upload');
+      if (res && res.success) {
+        setSavedSignature(null);
+        setPreview(null);
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: 'Tanda tangan berhasil dihapus',
+          confirmButtonText: 'OK'
+        });
+      } else {
+        throw new Error('Delete failed');
+      }
+    } catch (err) {
+      console.error('Gagal menghapus tanda tangan:', err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal',
+        text: 'Gagal menghapus tanda tangan: ' + (err.message || 'unknown'),
+        confirmButtonText: 'OK'
+      });
+    }
+  }
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -20,14 +72,24 @@ function UploadSignature({ userId = 'anonymous' }) {
         "image/webp",
       ];
       if (!allowedTypes.includes(selectedFile.type)) {
-        alert("Hanya file gambar (JPEG, PNG, WebP) yang diizinkan!");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Peringatan',
+          text: 'Hanya file gambar (JPEG, PNG, WebP) yang diizinkan!',
+          confirmButtonText: 'OK'
+        });
         e.target.value = "";
         return;
       }
 
       // Validasi ukuran file (max 10MB)
       if (selectedFile.size > 10 * 1024 * 1024) {
-        alert("Ukuran file maksimal 10MB!");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Peringatan',
+          text: 'Ukuran file terlalu besar. Maksimal 10MB.',
+          confirmButtonText: 'OK'
+        });
         e.target.value = "";
         return;
       }
@@ -44,7 +106,13 @@ function UploadSignature({ userId = 'anonymous' }) {
 
   const handleUpload = async () => {
     if (!file) {
-      console.error("No file selected");
+      // beri umpan balik ke pengguna jika belum memilih file
+      Swal.fire({
+        icon: 'warning',
+        title: 'Peringatan',
+        text: 'Pilih file terlebih dahulu sebelum menekan Upload',
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
@@ -61,10 +129,12 @@ function UploadSignature({ userId = 'anonymous' }) {
       }
     } catch (err) {
       console.error("Upload gagal:", err);
-      alert(
-        "Gagal menghapus background: " +
-          (err.response?.data?.error || err.message)
-      );
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal', 
+        text: 'Gagal menghapus background: ' + (err.message || 'unknown'),
+        confirmButtonText: 'OK'
+      });
     }
   };
 
@@ -72,7 +142,12 @@ const handleSave = async () => {
     // pilih payload: preview (dataURL) jika ada, atau file (File)
     const payload = preview || file;
     if (!payload) {
-      alert("Pilih tanda tangan dulu sebelum menyimpan");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Peringatan',
+        text: 'Pilih tanda tangan dulu sebelum menyimpan',
+        confirmButtonText: 'OK'
+      });
       return;
     }
 
@@ -95,13 +170,23 @@ const handleSave = async () => {
         // reset local preview/file
         setPreview(null);
         setFile(null);
-        alert("Tanda tangan berhasil disimpan ke Cloudinary!");
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: 'Tanda tangan berhasil disimpan!',
+          confirmButtonText: 'OK'
+        });
       } else {
         throw new Error('Response upload tidak sesuai');
       }
     } catch (err) {
       console.error("Upload gagal:", err);
-      alert("Upload gagal, coba lagi: " + (err.message || 'unknown'));
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal', 
+        text: 'Gagal menghapus background: ' + (err.message || 'unknown'),
+        confirmButtonText: 'OK'
+      });
     } finally {
       setLoading(false);
     }
@@ -127,7 +212,14 @@ const handleSave = async () => {
           {preview && (
             <button
               className="mt-2 px-4 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600 transition"
-              onClick={() => setPreview(null)}
+              onClick={async () => {
+                // jika preview sama dengan savedSignature.uploadUrl maka hapus dari cloud/db
+                if (savedSignature && savedSignature.uploadUrl && preview === savedSignature.uploadUrl) {
+                  await handleDeleteFromCloud();
+                } else {
+                  setPreview(null);
+                }
+              }}
             >
               Hapus
             </button>
@@ -146,23 +238,27 @@ const handleSave = async () => {
             type="file"
             accept="image/jpeg,image/jpg,image/png,image/webp"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-700 rounded-md px-2 py-1 cursor-pointer file:mr-3 file:py-1 file:px-4 file:rounded-md file:border file:border-gray-600 file:text-sm file:font-medium file:bg-transparent file:text-gray-600 "
+            className={`block w-full text-sm text-gray-700 rounded-md px-2 py-1 cursor-pointer file:mr-3 file:py-1 file:px-4 file:rounded-md file:border file:border-gray-600 file:text-sm file:font-medium file:bg-transparent file:text-gray-600 ${savedSignature && savedSignature.uploadUrl ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={Boolean(savedSignature && savedSignature.uploadUrl)}
           />
           <div className="flex gap-3">
             <button
               onClick={handleUpload}
-              className="mt-3 w-32 py-2 bg-[#243B83] text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+              className={`mt-3 w-32 py-2 bg-[#243B83] text-white font-semibold rounded-lg hover:bg-blue-700 transition ${(!file || loading) ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={!file || loading || Boolean(savedSignature && savedSignature.uploadUrl)}
             >
-              Upload
+              {loading ? 'Processing...' : 'Upload'}
             </button>
             <button
               onClick={handleSave}
-              className="mt-3 w-32 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+              className={`mt-3 w-32 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition ${(!file && !preview) || loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={((!file && !preview) || loading || Boolean(savedSignature && savedSignature.uploadUrl))}
             >
                 {loading ? "Menyimpan..." : "Simpan"}
             </button>
           </div>
         </div>
+        {/* existing 'Hapus' button above will handle deletion for saved uploads */}
     
     </>
   )

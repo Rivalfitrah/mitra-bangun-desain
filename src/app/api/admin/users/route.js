@@ -7,8 +7,7 @@ import prisma from "@/lib/prisma";
 export async function GET() {
   try {
     const token = cookies().get("token")?.value;
-    console.log("Token from cookie:", token);
-
+    
     if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

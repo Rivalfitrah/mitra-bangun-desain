@@ -1,32 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
-import { Bell, LogOut, User } from "lucide-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import HeaderDashboard from "@/components/HeaderDashboard";
+import { getUploadedDocuments } from '@/lib/api';
 
 export default function DiunggahPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const router = useRouter();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleClick = () => {
     router.push("/dashboard/tandatangan/diunggah/detail");
   };
 
-  const data = Array.from({ length: 25 }, (_, i) => ({
-    no: i + 1,
-    id: "Trans-220",
-    name: "Dokumen A",
-    date: "19/2/2025",
-    uploader: "Lorem1426",
-    status: i % 2 === 0 ? "Approved" : "Pending",
-  }));
+  useEffect(() => {
+    const fetchUploaded = async () => {
+      try {
+        setLoading(true);
+        const res = await getUploadedDocuments();
+        if (res && res.success) {
+          setData(res.data || []);
+        } else {
+          setData([]);
+          setError(res?.error || 'Failed to load uploaded documents');
+        }
+      } catch (err) {
+        console.error('Error fetching uploaded documents:', err);
+        setError(err.message || 'Error fetching uploaded documents');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUploaded();
+  }, []);
 
   // hitung total halaman
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(data.length / itemsPerPage));
 
   // data per halaman
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -93,40 +109,50 @@ export default function DiunggahPage() {
                 </tr>
               </thead>
               <tbody>
-                {currentData.map((item) => (
-                  <tr key={item.no} className="border-b text-[#243B83]">
-                    <td className="px-4 py-2">{item.no}</td>
-                    <td className="px-4 py-2">{item.id}</td>
-                    <td className="px-4 py-2">{item.name}</td>
-                    <td className="px-4 py-2">{item.date}</td>
-                    <td className="px-4 py-2">{item.uploader}</td>
-                    <td className="px-4 py-2">
-                      <span
-                        className={`font-medium ${
-                          item.status === "Approved"
-                            ? "text-green-600"
-                            : "text-red-500"
-                        }`}
-                      >
-                        {item.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2 flex gap-2">
-                      <button
-                        onClick={handleClick}
-                        className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white"
-                      >
-                        Detail
-                      </button>
-                      <button className="px-3 py-1 bg-[#243B83] text-white rounded hover:bg-blue-500">
-                        Download
-                      </button>
-                      <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
-                        Hapus
-                      </button>
+                {loading ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
+                      Memuat dokumen...
                     </td>
                   </tr>
-                ))}
+                ) : error ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-6 text-center text-red-500">
+                      {error}
+                    </td>
+                  </tr>
+                ) : currentData.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
+                      Tidak ada dokumen yang diunggah.
+                    </td>
+                  </tr>
+                ) : (
+                  currentData.map((doc, idx) => (
+                    <tr key={doc.id} className="border-b text-[#243B83]">
+                      <td className="px-4 py-2">{indexOfFirstItem + idx + 1}</td>
+                      <td className="px-4 py-2">{doc.customId}</td>
+                      <td className="px-4 py-2">{doc.title}</td>
+                      <td className="px-4 py-2">{new Date(doc.createdAt).toLocaleString()}</td>
+                      <td className="px-4 py-2">{doc.uploader?.profil?.nama || doc.uploader?.email}</td>
+                      <td className="px-4 py-2">
+                        <span className={`font-medium ${doc.signers?.every(s=>s.status==='signed') ? 'text-green-600' : 'text-red-500'}`}>
+                          {doc.signers?.every(s=>s.status==='signed') ? 'Approved' : 'Pending'}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2 flex gap-2">
+                        <button
+                          onClick={handleClick}
+                          className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white"
+                        >
+                          Detail
+                        </button>
+                        <a href={doc.content} target="_blank" rel="noreferrer" className="px-3 py-1 bg-[#243B83] text-white rounded hover:bg-blue-500">Download</a>
+                        <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Hapus</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

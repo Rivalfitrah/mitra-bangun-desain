@@ -1,6 +1,6 @@
 import Sidebar from "@/components/Sidebar";
 import HeaderDashboard from "@/components/HeaderDashboard";
-import TandaTangan from "@/components/dashboard/TandaTangan";
+import TandaTangan from "@/components/signatures/TandaTangan";
 
 export default function ProyekKami() {
   return (

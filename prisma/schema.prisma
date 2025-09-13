@@ -17,6 +17,8 @@ model User {
   createdAt DateTime @default(now())
   profil Profil?
   signature Signature?
+  documentSigners DocumentSigner[]
+  uploadedDocuments Document[]
 }
 
 model Profil {
@@ -31,18 +33,37 @@ model Profil {
 }
 
 model Signature {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int      @unique   // konsisten dengan User.id
-  imageUrl  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isActive  Boolean  @default(true)
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int      @unique
+  manualUrl  String?  // tanda tangan dari canvas
+  uploadUrl  String?  // tanda tangan hasil upload
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isActive   Boolean  @default(true)
 }
 
+model Document {
+  id        Int      @id @default(autoincrement())
+  title     String
+  type      String
+  content   String
+  docType   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  customId  String   @unique
+  uploaderId Int?
+  uploader   User?    @relation(fields: [uploaderId], references: [id])
+  signers   DocumentSigner[]
+}
 
+model DocumentSigner {
+  id         Int       @id @default(autoincrement())
+  documentId Int
+  userId     Int
+  status     String    @default("pending") // pending, signed, rejected
+  signedAt   DateTime?
 
-
-
-
-
+  document   Document  @relation(fields: [documentId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+}

@@ -11,10 +11,6 @@ export default function ProyekKami() {
   const itemsPerPage = 10;
   const router = useRouter();
 
-  const handleClick = () => {
-    router.push("/dashboard/proyekkami/tambahproyek");
-  };
-
   const data = Array.from({ length: 25 }, (_, i) => ({
     no: i + 1,
     image: "file gambar",
@@ -76,7 +72,7 @@ export default function ProyekKami() {
               Sortir
             </button>
             <button
-              onClick={handleClick}
+              
               className="px-6 py-3 bg-[#243B83] border rounded-lg shadow-sm hover:bg-blue-700 text-white"
             >
               Tambah

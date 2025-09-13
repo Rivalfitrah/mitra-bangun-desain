@@ -1,7 +1,6 @@
-"use client";
 import React from "react";
-import CanvasSignature from "../signatures/CanvasSignature";
-import UploadSignature from "../signatures/UploadSignature";
+import CanvasSignature from "./CanvasSignature";
+import UploadSignature from "./UploadSignature";
 
 function TandaTangan() {
   return (

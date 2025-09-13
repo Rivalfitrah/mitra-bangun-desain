@@ -9,7 +9,7 @@ async function uploadToCloudinary(file) {
 
   return new Promise((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: "profiles" }, (error, result) => {
+      .upload_stream({ folder: "/mitra-bangun-desain/profiles" }, (error, result) => {
         if (error) return reject(error);
         resolve(result);
       })

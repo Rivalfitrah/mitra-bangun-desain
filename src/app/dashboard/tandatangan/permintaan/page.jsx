@@ -1,31 +1,48 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
-import { Bell, LogOut, User } from "lucide-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import HeaderDashboard from "@/components/HeaderDashboard";
+import { getDocuments } from '@/lib/api';
 
 export default function Ditandatangani() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const router = useRouter();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleClick = () => {
     router.push("/dashboard/tandatangan/permintaan/detail");
   };
 
-  const data = Array.from({ length: 25 }, (_, i) => ({
-    no: i + 1,
-    id: "Trans-220",
-    name: "Dokumen A",
-    upload: "19/2/2025",
-    persetujuan: "Lorem1426",
-  }));
+  useEffect(() => {
+    const fetchAssigned = async () => {
+      try {
+        setLoading(true);
+        const res = await getDocuments();
+        if (res && res.success) {
+          setData(res.data || []);
+        } else {
+          setData([]);
+          setError(res?.error || 'Failed to load documents');
+        }
+      } catch (err) {
+        console.error('Error fetching documents:', err);
+        setError(err.message || 'Error fetching documents');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAssigned();
+  }, []);
 
   // hitung total halaman
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(data.length / itemsPerPage));
 
   // data per halaman
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -92,29 +109,56 @@ export default function Ditandatangani() {
                 </tr>
               </thead>
               <tbody>
-                {currentData.map((item) => (
-                  <tr key={item.no} className="border-b text-[#243B83]">
-                    <td className="px-4 py-2">{item.no}</td>
-                    <td className="px-4 py-2">{item.id}</td>
-                    <td className="px-4 py-2">{item.name}</td>
-                    <td className="px-4 py-2">{item.upload}</td>
-                    <td className="px-4 py-2">{item.persetujuan}</td>
-                    <td className="px-4 py-2 flex gap-2">
-                      <button
-                        onClick={handleClick}
-                        className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white"
-                      >
-                        Detail
-                      </button>
-                      <button className="px-3 py-1 bg-[#243B83] text-white rounded hover:bg-blue-500">
-                        Download
-                      </button>
-                      <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
-                        Hapus
-                      </button>
+                {loading ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                      Memuat dokumen...
                     </td>
                   </tr>
-                ))}
+                ) : error ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-6 text-center text-red-500">
+                      {error}
+                    </td>
+                  </tr>
+                ) : currentData.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                      Tidak ada permintaan tanda tangan.
+                    </td>
+                  </tr>
+                ) : (
+                  currentData.map((doc, idx) => (
+                    <tr key={doc.id} className="border-b text-[#243B83]">
+                      <td className="px-4 py-2">{indexOfFirstItem + idx + 1}</td>
+                      <td className="px-4 py-2">{doc.id}</td>
+                      <td className="px-4 py-2">{doc.title}</td>
+                      <td className="px-4 py-2">{new Date(doc.createdAt).toLocaleString()}</td>
+                      <td className="px-4 py-2">
+                        {doc.signers?.map(s => s.status).join(', ')}
+                      </td>
+                      <td className="px-4 py-2 flex gap-2">
+                        <button
+                          onClick={handleClick}
+                          className="px-3 py-1 bg-white border border-[#243B83] text-[#243B83] rounded hover:bg-[#243B83] hover:text-white"
+                        >
+                          Detail
+                        </button>
+                        <a
+                          href={doc.content}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-3 py-1 bg-[#243B83] text-white rounded hover:bg-blue-500"
+                        >
+                          Download
+                        </a>
+                        <button className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                          Hapus
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
